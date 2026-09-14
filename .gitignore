@@ -1,0 +1,111 @@
+# ============================================
+
+# DATA 601 — Python / Jupyter Project
+
+# ============================================
+
+# ---------- Python ----------
+
+**pycache**/
+*.py[cod]
+*$py.class
+*.so
+
+# Python packaging
+
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# ---------- Virtual Environments ----------
+
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ---------- Jupyter Notebook ----------
+
+.ipynb_checkpoints/
+
+# ---------- IDEs / Editors ----------
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# VS Code local history
+
+.history/
+
+# ---------- macOS ----------
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# ---------- Windows ----------
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# ---------- Linux ----------
+
+.directory
+
+# ---------- Environment / Secrets ----------
+
+.env
+.env.*
+!.env.example
+
+# Credentials / API keys
+
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# ---------- Logs ----------
+
+*.log
+logs/
+
+# ---------- Python Tools ----------
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# ---------- Generated / Temporary Files ----------
+
+*.tmp
+*.temp
+*.cache
+*.bak
+*.old
+*.orig
+*.rej
+
+# ---------- Generated Reports ----------
+
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
