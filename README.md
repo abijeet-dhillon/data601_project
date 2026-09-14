@@ -123,14 +123,34 @@ The report and notebook are submitted to the **D2L Project 3 folder**.
 The repository is organized as follows:
 
 ```text
-TBD
+.
+├── README.md
+├── data/
+│   ├── raw/
+│   └── processed/
+├── notebooks/
+│   ├── project_1_visualization.ipynb
+│   ├── project_2_model.ipynb
+│   └── project_3_final.ipynb
+├── src/
+│   └── ...
+├── figures/
+│   └── ...
+├── report/
+│   └── final_report.pdf
+└── presentation/
+    └── presentation.pdf
 ```
 
 ### Directory descriptions
 
-```text
-TBD
-```
+- **`data/raw/`** — Original, unmodified datasets.
+- **`data/processed/`** — Cleaned or transformed datasets used for analysis.
+- **`notebooks/`** — Computational notebooks for each project stage.
+- **`src/`** — Reusable Python code and helper functions.
+- **`figures/`** — Visualizations generated during the analysis.
+- **`report/`** — Final written report.
+- **`presentation/`** — Materials for the final presentation.
 
 ---
 
