@@ -1,299 +1,134 @@
-# DATA 601 — Data Science Project
+# DATA 601 — Predicting Next-Year GDP per Capita
 
-This repository contains our group project for **DATA 601 at the University of Calgary (UofC)**. The project follows the three-stage structure of the course, taking a dataset from initial exploration and visualization through predictive modelling and, finally, communicating insights through a data-driven story.
+University of Calgary DATA 601 group project by **Abijeet Dhillon, Noor Fatima, and Tam Nguyen**.
 
-## Project Overview
+The analysis asks whether current-year energy, economic, infrastructure, urbanization, environmental, and country information can predict a country's GDP per capita in the following year. The complete analysis is in [notebooks/DATA601_Project.ipynb](notebooks/DATA601_Project.ipynb), from data cleaning and exploratory plots through model comparison, tuning, and interpretation.
 
-The project is completed in three stages:
-
-1. **Stage 1 — Visualize Your Data**
-2. **Stage 2 — Running a Model**
-3. **Stage 3 — Telling a Story with Data**
-
-Our goal is to develop a clear question of interest, understand the data through meaningful visualizations, apply an appropriate predictive model, and communicate the results to a stakeholder who has a direct interest in the question.
-
----
-
-## Stage 1: Visualize Your Data
-
-**Due:** September 18  
-**Weight:** 20% of final mark
-
-The first stage focuses on exploring and visualizing our chosen dataset.
-
-The computational notebook includes:
-
-- An introduction to the dataset
-- Data cleaning and preparation
-- Exploratory data analysis
-- Key descriptive statistics
-- Appropriate data visualizations
-- Discussion of patterns, relationships, and potential questions raised by the data
-
-The emphasis is on the **organization, reasoning, and effectiveness of our visualizations**, rather than simply producing a large number of plots.
-
-### Deliverable
-
-The Stage 1 computational notebook is submitted to the **D2L Project 1 folder**.
-
----
-
-## Stage 2: Running a Model
-
-**Due:** October 2  
-**Weight:** 20% of final mark
-
-In Stage 2, we build on the exploratory work from Stage 1 by using a predictive model to investigate a question of interest.
-
-The notebook includes:
-
-- A clearly defined modelling question
-- Justification for the selected model
-- Data preparation and feature selection
-- Model training
-- Model evaluation
-- Appropriate performance metrics and visualizations
-- Interpretation of the results
-- Discussion of limitations and potential next steps
-
-The objective is not simply to obtain the best possible prediction, but to use an appropriate model to answer a meaningful question with the available data.
-
-### Deliverable
-
-The Stage 2 computational notebook is submitted to the **D2L Project 2 folder**.
-
----
-
-## Stage 3: Telling a Story with Data
-
-**Presentation:** October 5  
-**Written report + notebook:** October 9
-
-### Weight
-
-| Component | Weight |
-|---|---:|
-| Written report | 20% |
-| Computational notebook | 2.5% |
-| Group presentation | 2.5% |
-| **Total** | **25%** |
-
-The final stage brings together the skills developed throughout the course.
-
-We use our dataset to tell a coherent, data-driven story to a stakeholder with a direct interest in the answer.
-
-The final project includes:
-
-1. **Problem statement**
-   - Clearly state the question we are trying to answer.
-   - Explain why the question matters and who has a stake in the answer.
-
-2. **Data description**
-   - Describe the dataset and its relevant variables.
-   - Explain any data cleaning or preprocessing.
-   - Use key visualizations to communicate important characteristics of the data.
-
-3. **Modelling**
-   - Apply at least one predictive model.
-   - Explain why the selected model is appropriate for the question and data.
-   - Evaluate and interpret the model's results.
-
-4. **Results and discussion**
-   - Explain what the analysis tells us about the original question.
-   - Connect the model results with the exploratory analysis.
-   - Discuss limitations and uncertainty.
-   - Identify reasonable next steps.
-
-Importantly, **weak or inconclusive results are still useful**. A model that does not produce strong results can reveal limitations in the data and motivate further investigation.
-
-### Deliverables
-
-The final project consists of:
-
-- A written report in Word, PDF, or another appropriate format
-- The computational notebook containing the code used to produce the analysis
-- A 3-minute group presentation
-
-The report and notebook are submitted to the **D2L Project 3 folder**.
-
----
-
-## Repository Structure
-
-The repository is organized as follows:
+## Repository structure
 
 ```text
 .
 ├── README.md
+├── requirements.txt
+├── .gitignore
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   └── Data.xlsx
 ├── notebooks/
-│   ├── project_1_visualization.ipynb
-│   ├── project_2_model.ipynb
-│   └── project_3_final.ipynb
-├── src/
-│   └── ...
-├── figures/
-│   └── ...
-├── report/
-│   └── final_report.pdf
-└── presentation/
-    └── presentation.pdf
+│   └── DATA601_Project.ipynb
+├── presentation/
+│   ├── DATA601_Presentation.pdf
+│   └── DATA601_Presentation.pptx
+└── report/
+    ├── DATA601_Report.docx
+    └── DATA601_Report.pdf
 ```
 
-### Directory descriptions
+Local setup creates `.venv/`. Running the notebook creates intermediate CSV files and encoder artifacts in `data/`; these generated files are ignored by Git. The optional command-line run below saves an executed notebook in `build/`, which is also ignored.
 
-- **`data/raw/`** — Original, unmodified datasets.
-- **`data/processed/`** — Cleaned or transformed datasets used for analysis.
-- **`notebooks/`** — Computational notebooks for each project stage.
-- **`src/`** — Reusable Python code and helper functions.
-- **`figures/`** — Visualizations generated during the analysis.
-- **`report/`** — Final written report.
-- **`presentation/`** — Materials for the final presentation.
+## Dataset and analysis
 
----
+The included [data/Data.xlsx](data/Data.xlsx) workbook contains World Bank [World Development Indicators](https://databank.worldbank.org/source/world-development-indicators#advancedDownloadOptions) data. Its `Data` sheet has 5,208 country-indicator rows, covering 217 countries, 24 indicators, and years 2006–2025. The workbook is already included; no download or Google Drive connection is needed to run the analysis.
 
-## Dataset
+The notebook:
 
-Our project uses:
+1. Reshapes the workbook into country-year observations, limits the analysis to 2006–2021, and removes countries with incomplete GDP per capita or GDP growth histories. This leaves 193 countries and 3,088 country-year observations.
+2. Explores GDP, energy use, electricity access, emissions, urbanization, and correlations.
+3. Constructs next-year GDP per capita as the regression target. Predictor years are split chronologically into training (2006–2015), validation (2016–2017), and test (2018–2020).
+4. Handles missing predictors using missing-value flags, forward filling within countries, and training-set medians; selects features and encodes countries.
+5. Compares Linear Regression, Decision Tree, Random Forest, and XGBoost, tunes the ensemble models, and evaluates a log-transformed target.
+6. Evaluates the final XGBoost model on the held-out test period, compares it with a “next year equals this year” benchmark, and examines errors and feature importance.
 
-> **Dataset:** *[Dataset name]*
+The [report](report/DATA601_Report.pdf) and [presentation](presentation/DATA601_Presentation.pdf) describe the findings and limitations.
 
-The dataset was obtained from:
+## Run locally
 
-> *[Source / URL]*
+Use **Python 3.14** for the documented environment. Run setup commands from the repository root.
 
-### Why this dataset?
+### 1. Get the project and create a virtual environment
 
-We selected this dataset because:
-
-- *[Reason 1]*
-- *[Reason 2]*
-- *[Reason 3]*
-
-The dataset contains information about *[brief description of what the observations represent]* and allows us to investigate *[general topic/question]*.
-
----
-
-## Research Question
-
-### Primary Question
-
-> **[Insert your main research question here.]**
-
-### Motivation
-
-Our question is motivated by *[brief explanation of why the question matters]*.
-
-The primary stakeholder for this analysis is **[stakeholder]**, who may use the results to *[decision/action/use of findings]*.
-
----
-
-## Methodology
-
-Our analysis follows the general workflow:
-
-```text
-Raw Data
-   ↓
-Data Cleaning & Preparation
-   ↓
-Exploratory Data Analysis
-   ↓
-Data Visualization
-   ↓
-Research Question
-   ↓
-Predictive Model
-   ↓
-Model Evaluation
-   ↓
-Interpretation
-   ↓
-Data-Driven Conclusions
-```
-
-We will use appropriate statistical and machine-learning techniques based on the research question and characteristics of the dataset.
-
----
-
-## Technologies
-
-The project is primarily developed using:
-
-- Python
-- Jupyter Notebook
-- pandas
-- NumPy
-- Matplotlib
-- seaborn
-- scikit-learn
-
-Additional libraries may be added as required.
-
----
-
-## Reproducibility
-
-To reproduce the analysis:
-
-1. Clone this repository.
-2. Install the required Python dependencies.
-3. Obtain the dataset from the source described above.
-4. Place the raw data in `data/raw/`.
-5. Run the notebooks in order.
-
-A `requirements.txt` file will be provided once the project dependencies have been finalized.
+On macOS or Linux:
 
 ```bash
-git clone <repository-url>
-cd <repository-name>
-pip install -r requirements.txt
+git clone https://github.com/abijeet-dhillon/data601_project.git
+cd data601_project
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
----
+If you already have this folder, start with `cd` into it and skip cloning. If multiple Python versions are installed, use `python3.14` to create the environment.
 
-## Group Members
+On Windows PowerShell, use these setup commands after cloning and entering the repository:
 
-| Name | Role |
-|---|---|
-| *[Name]* | *[Role / contribution]* |
-| *[Name]* | *[Role / contribution]* |
-| *[Name]* | *[Role / contribution]* |
+```powershell
+py -3.14 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
 
----
+The requirements include the analysis libraries, the Excel reader (`openpyxl`), the LOWESS dependency (`statsmodels`), and the Jupyter tools needed to open and execute the notebook.
 
-## Project Timeline
+On **macOS**, use the OpenMP runtime already bundled with scikit-learn inside `.venv`. From the repository root, run this in each new terminal before starting Jupyter:
 
-| Date | Milestone |
-|---|---|
-| September 18 | Stage 1 — Visualization notebook due |
-| October 2 | Stage 2 — Modelling notebook due |
-| October 5 | 3-minute group presentation |
-| October 9 | Stage 3 — Final report and notebook due |
+```bash
+export DYLD_LIBRARY_PATH="$PWD/.venv/lib/python3.14/site-packages/sklearn/.dylibs${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+```
 
----
+This lets XGBoost load `libomp.dylib` without a system-wide Homebrew installation. Keep this environment variable set in the terminal used for either execution method below.
 
-## Status
+### 2. Open and execute the notebook
 
-- [ ] Dataset selected
-- [ ] Research question defined
-- [ ] Stage 1 — Data cleaning
-- [ ] Stage 1 — Exploratory analysis
-- [ ] Stage 1 — Visualizations
-- [ ] Stage 2 — Model selection
-- [ ] Stage 2 — Model training
-- [ ] Stage 2 — Model evaluation
-- [ ] Stage 3 — Final analysis
-- [ ] Stage 3 — Written report
-- [ ] Stage 3 — Presentation
-- [ ] Final submission
+With `.venv` activated, launch Jupyter from the repository root:
 
----
+```bash
+python -m notebook notebooks/DATA601_Project.ipynb
+```
 
-## Acknowledgements
+Use the Python kernel from `.venv`, then choose **Kernel → Restart Kernel and Run All Cells**. Run the notebook from the beginning: later cells reload CSVs and encoders produced by earlier cells. The notebook resolves `data/` when its working directory is either the repository root or `notebooks/`.
 
-This project was completed as part of **DATA 601 at the University of Calgary**.
+Hyperparameter searches evaluate 150 XGBoost fits and 540 Random Forest fits, plus final refits. A complete run can take several minutes or longer depending on your machine.
 
-Dataset and external resources are credited in the relevant notebooks and final report.
+### 3. Execute without the browser (optional)
+
+From the repository root, with `.venv` activated:
+
+```bash
+python -m nbconvert --to notebook --execute notebooks/DATA601_Project.ipynb \
+  --ExecutePreprocessor.kernel_name=python3 \
+  --ExecutePreprocessor.timeout=-1 \
+  --output DATA601_Project.executed.ipynb \
+  --output-dir build
+```
+
+This runs every code cell and saves fresh outputs to `build/DATA601_Project.executed.ipynb`. The source notebook retains its existing saved outputs until you rerun and save it. In PowerShell, put the command on one line or use backticks instead of the shell continuation backslashes.
+
+The tuning cells use all available job workers (`n_jobs=-1`). To limit a run to four workers and one OpenMP thread per worker on macOS/Linux, prefix the execution command with `LOKY_MAX_CPU_COUNT=4 OMP_NUM_THREADS=1`. This changes resource usage without changing the notebook's models or search grids.
+
+## Local validation
+
+All **93 code cells** completed successfully on macOS (Apple Silicon), using Python 3.14.7 and the versions pinned in `requirements.txt`. Validation executed the notebook cells in order through IPython, with four threading workers and one OpenMP thread, because this session's sandbox blocks Jupyter kernel sockets. The browser and `nbconvert` launch commands above are provided for normal local use; a Jupyter kernel launch was not verified in the sandbox.
+
+The local final model's test MAE was **1,470.75**, RMSE **3,835.69**, and R² **0.9772**. Library version differences can change tuning results and metrics from the original Colab run. The notebook's analysis code, existing written interpretation, report, and presentation retain the original project work; use the freshly executed tables when reviewing local results.
+
+## Generated files
+
+A complete run writes these files under `data/` and overwrites them on subsequent runs:
+
+| Files | Contents |
+| --- | --- |
+| `df_final.csv` | Cleaned country-year data used for exploration and modelling |
+| `train_ffill_median.csv`, `validation_ffill_median.csv`, `test_ffill_median.csv` | Imputed splits with country, year, and target columns |
+| `X_train_final.csv`, `X_val_final.csv`, `X_test_final.csv` | Selected predictors with country one-hot encoding |
+| `y_train_final.csv`, `y_val_final.csv`, `y_test_final.csv` | Matching next-year GDP targets |
+| `country_encoder.pkl`, `final_feature_columns.pkl` | Country encoder and final predictor column order |
+
+Plots and evaluation tables appear inside the notebook. The analysis does not export a trained final model.
+
+## Troubleshooting
+
+- **Missing files:** keep `data/Data.xlsx` in its supplied location, start Jupyter from the repository root, and run all cells in order.
+- **Missing Python module:** activate `.venv`, install `requirements.txt`, and make sure Jupyter is using the environment's Python kernel.
+- **macOS XGBoost OpenMP error:** repeat the `DYLD_LIBRARY_PATH` export above from the repository root, then relaunch Jupyter from that terminal. The runtime stays inside `.venv`; no Homebrew install is required.
+- **Run still busy:** the Random Forest grid search is the largest step. Let it finish; the command-line timeout is disabled for this reason.
+
+To leave the virtual environment, run `deactivate`.
